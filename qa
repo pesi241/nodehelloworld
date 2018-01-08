@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# vim: set syn=sh
+
+bash build
+docker save hello-world | bzip2 | pv | ssh $VMSERVER_USER@$VMSERVER 'bunzip2 | docker load'
+dvmserver run -d -p 8080:8080 --rm --name hello-world hello-world:latest

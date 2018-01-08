@@ -1,0 +1,38 @@
+{
+  "name": "docker-node-helloworld",
+  "version": "1.0.0",
+  "description": "A simple docker container with a node.js hello world app.",
+  "engines": {
+    "node": ">=6.9.4"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "build",
+    "qa": "qa"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haensl/docker-node-helloworld.git"
+  },
+  "keywords": [
+    "docker",
+    "node",
+    "express",
+    "hello",
+    "world"
+  ],
+  "author": {
+    "name": "HP Dietz",
+    "email": "<h.p.dietz@gmail.com>",
+    "twitter": "@h_p_d"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haensl/docker-node-helloworld/issues"
+  },
+  "homepage": "https://github.com/haensl/docker-node-helloworld#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
