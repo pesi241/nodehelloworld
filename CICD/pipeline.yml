@@ -68,5 +68,5 @@ jobs:
                 trigger: true
               - put: caas-project
                 params:
-                    kubectl: apply -f code/kubernetes/deployment.yaml
+                    kubectl: apply -f code/kubernetes/deployment.yml
 #                    kubectl: apply -f code/kubernetes/servicedeployment.yml
