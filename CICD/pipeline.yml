@@ -1,0 +1,72 @@
+---
+
+resource_types:
+# Kubernetes Resource
+    - name: kubernetes
+      type: docker-image
+      source:
+        repository: zlabjp/kubernetes-resource
+        tag: "1.11"
+
+resources:
+
+      - name: code
+        type: git
+        icon: nodejs
+        source:
+          uri:
+          private_key: ((815005user-private-key))
+          branch: master
+ # semver for versioning
+      - name: zeta-version
+        type: semver
+        source:
+          driver: git
+          uri: git@github.comcast.com:leeladhar-test1/zeta_version.git
+          branch: master
+          file: version
+          private_key: ((815005user-private-key))
+ # Docker Hub
+      - name: docker-hub
+        type: docker-image
+        source:
+          repository: hub.comcast.net/zeta/helloworld
+          username: ((service_account_user))
+          password: ((service_account_password))
+# Kubernetes Resource to connect with OpenShift
+      - name: caas-project
+        type: kubernetes
+        source:
+          server: https://as-c1.caas.comcast.net
+#          server: https://ch2-c1.caas.comcast.net
+          namespace: test
+          token: ((kubdeptocken))
+jobs:
+      - name: app_build
+        plan:
+              - get: code
+# checking application version
+              - get: zeta-version
+                params: {bump: patch}
+
+              - put: zeta-version
+                params: {file: zeta-version/version}
+# upload docker image to docker hub
+              - put: docker-hub
+                params:
+                    dir: helloworld
+                    build: code
+                    tag_file: zeta-version/version
+                    tag_as_latest: true
+                get_params: {skip_download: true}
+# creating pods in open shift
+      - name: caas_deploy
+        plan:
+              - get: code
+                passed:
+                - app_build
+                trigger: true
+              - put: caas-project
+                params:
+                    kubectl: apply -f code/kubernetes/deployment.yaml
+#                    kubectl: apply -f code/kubernetes/servicedeployment.yml
